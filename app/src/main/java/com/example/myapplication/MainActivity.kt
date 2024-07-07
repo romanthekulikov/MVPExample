@@ -1,11 +1,11 @@
 package com.example.myapplication
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.ActivityMainBinding
+import com.example.myapplication.recycler.TaskListAdapter
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
-import moxy.presenter.InjectPresenter
 
 class MainActivity : MvpAppCompatActivity(), MainView {
     val mainPresenter by moxyPresenter { MainPresenter() }
@@ -18,12 +18,17 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         setContentView(binding.root)
 
         binding.button.setOnClickListener {
-            mainPresenter.requestChangeText("I'm fine!")
+            mainPresenter.requestInitList()
         }
-
     }
 
     override fun changeText(text: String) {
-        binding.text.text = text
+
+    }
+
+    override fun initTaskList(taskList: List<Task>) {
+        val adapter = TaskListAdapter(taskList)
+        binding.recyclerviewTask.adapter = adapter
+        binding.recyclerviewTask.layoutManager = LinearLayoutManager(this)
     }
 }
